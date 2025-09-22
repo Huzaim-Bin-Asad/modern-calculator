@@ -34,6 +34,8 @@ function App() {
   const [currentMode, setCurrentMode] = useState('standard');
   const [isDarkTheme, setIsDarkTheme] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [mobileHistoryOpen, setMobileHistoryOpen] = useState(false);
 
   const toggleTheme = () => {
     setIsDarkTheme(!isDarkTheme);
@@ -41,6 +43,14 @@ function App() {
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
+  };
+
+  const toggleMobileSidebar = () => {
+    setMobileSidebarOpen(!mobileSidebarOpen);
+  };
+
+  const toggleMobileHistory = () => {
+    setMobileHistoryOpen(!mobileHistoryOpen);
   };
 
   const renderCurrentMode = () => {
@@ -84,57 +94,92 @@ function App() {
     <ThemeContext.Provider value={{ isDarkTheme, toggleTheme }}>
       <CalculatorProvider>
         <div className={`app-container ${themeClass}`}>
-          <div className="container-fluid h-100 p-0">
-            <div className="row h-100 g-0">
-              {/* Sidebar */}
-              <div className={`col-3 ${sidebarCollapsed ? 'd-none' : ''}`}>
-                <Sidebar 
-                  currentMode={currentMode}
-                  setCurrentMode={setCurrentMode}
-                  onToggleSidebar={toggleSidebar}
-                />
-              </div>
-              
-              {/* Main Calculator Area */}
-              <div className={`${sidebarCollapsed ? 'col-9' : 'col-6'}`}>
-                <div className="calculator-main">
-                  {sidebarCollapsed && (
-                    <div className="sidebar-toggle-bar">
-                      <button 
-                        className="open-sidebar-btn"
-                        onClick={toggleSidebar}
-                        title="Open sidebar"
-                      >
-                        ☰
-                      </button>
-                      <div className="selected-mode">
-                        {currentMode === 'standard' && 'Standard'}
-                        {currentMode === 'scientific' && 'Scientific'}
-                        {currentMode === 'graphing' && 'Graphing'}
-                        {currentMode === 'programmer' && 'Programmer'}
-                        {currentMode === 'date' && 'Date calculation'}
-                        {currentMode === 'length' && 'Length'}
-                        {currentMode === 'volume' && 'Volume'}
-                        {currentMode === 'weight' && 'Weight and mass'}
-                        {currentMode === 'temperature' && 'Temperature'}
-                        {currentMode === 'energy' && 'Energy'}
-                        {currentMode === 'area' && 'Area'}
-                        {currentMode === 'speed' && 'Speed'}
-                        {currentMode === 'time' && 'Time'}
-                        {currentMode === 'power' && 'Power'}
-                      </div>
+        <div className="container-fluid h-100 p-0">
+          {/* Mobile Controls */}
+          <div className="mobile-controls d-md-none">
+            <button 
+              className="mobile-menu-btn"
+              onClick={toggleMobileSidebar}
+              title="Open menu"
+            >
+              ☰
+            </button>
+            <div className="mobile-mode-title">
+              {currentMode === 'standard' && 'Standard'}
+              {currentMode === 'scientific' && 'Scientific'}
+              {currentMode === 'graphing' && 'Graphing'}
+              {currentMode === 'programmer' && 'Programmer'}
+              {currentMode === 'date' && 'Date calculation'}
+              {currentMode === 'length' && 'Length'}
+              {currentMode === 'volume' && 'Volume'}
+              {currentMode === 'weight' && 'Weight and mass'}
+              {currentMode === 'temperature' && 'Temperature'}
+              {currentMode === 'energy' && 'Energy'}
+              {currentMode === 'area' && 'Area'}
+              {currentMode === 'speed' && 'Speed'}
+              {currentMode === 'time' && 'Time'}
+              {currentMode === 'power' && 'Power'}
+            </div>
+            <button 
+              className="mobile-history-btn"
+              onClick={toggleMobileHistory}
+              title="Open history"
+            >
+              📊
+            </button>
+          </div>
+
+          <div className="row h-100 g-0">
+            {/* Sidebar */}
+            <div className={`col-3 ${sidebarCollapsed ? 'd-none' : ''} ${mobileSidebarOpen ? 'mobile-sidebar-open' : ''}`}>
+              <Sidebar 
+                currentMode={currentMode}
+                setCurrentMode={setCurrentMode}
+                onToggleSidebar={toggleSidebar}
+                onMobileClose={() => setMobileSidebarOpen(false)}
+              />
+            </div>
+            
+            {/* Main Calculator Area */}
+            <div className={`${sidebarCollapsed ? 'col-9' : 'col-6'}`}>
+              <div className="calculator-main">
+                {sidebarCollapsed && (
+                  <div className="sidebar-toggle-bar">
+                    <button 
+                      className="open-sidebar-btn"
+                      onClick={toggleSidebar}
+                      title="Open sidebar"
+                    >
+                      ☰
+                    </button>
+                    <div className="selected-mode">
+                      {currentMode === 'standard' && 'Standard'}
+                      {currentMode === 'scientific' && 'Scientific'}
+                      {currentMode === 'graphing' && 'Graphing'}
+                      {currentMode === 'programmer' && 'Programmer'}
+                      {currentMode === 'date' && 'Date calculation'}
+                      {currentMode === 'length' && 'Length'}
+                      {currentMode === 'volume' && 'Volume'}
+                      {currentMode === 'weight' && 'Weight and mass'}
+                      {currentMode === 'temperature' && 'Temperature'}
+                      {currentMode === 'energy' && 'Energy'}
+                      {currentMode === 'area' && 'Area'}
+                      {currentMode === 'speed' && 'Speed'}
+                      {currentMode === 'time' && 'Time'}
+                      {currentMode === 'power' && 'Power'}
                     </div>
-                  )}
-                  {renderCurrentMode()}
-                </div>
-              </div>
-              
-              {/* History and Memory Panel */}
-              <div className="col-3">
-                <HistoryPanel />
+                  </div>
+                )}
+                {renderCurrentMode()}
               </div>
             </div>
+            
+            {/* History and Memory Panel */}
+            <div className={`col-3 ${mobileHistoryOpen ? 'mobile-history-open' : ''}`}>
+              <HistoryPanel />
+            </div>
           </div>
+        </div>
         </div>
       </CalculatorProvider>
     </ThemeContext.Provider>

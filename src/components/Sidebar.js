@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTheme } from '../App';
 
-const Sidebar = ({ currentMode, setCurrentMode, onToggleSidebar }) => {
+const Sidebar = ({ currentMode, setCurrentMode, onToggleSidebar, onMobileClose }) => {
   const { isDarkTheme, toggleTheme } = useTheme();
 
   const modes = [
@@ -52,7 +52,10 @@ const Sidebar = ({ currentMode, setCurrentMode, onToggleSidebar }) => {
             <li key={mode.id} className="mode-item">
               <button
                 className={`mode-button ${currentMode === mode.id ? 'active' : ''}`}
-                onClick={() => setCurrentMode(mode.id)}
+                onClick={() => {
+                  setCurrentMode(mode.id);
+                  if (onMobileClose) onMobileClose();
+                }}
               >
                 <span className="mode-icon">{mode.icon}</span>
                 <span className="mode-text">{mode.name}</span>
@@ -68,7 +71,10 @@ const Sidebar = ({ currentMode, setCurrentMode, onToggleSidebar }) => {
               <li key={converter.id} className="mode-item">
                 <button
                   className={`mode-button ${currentMode === converter.id ? 'active' : ''}`}
-                  onClick={() => setCurrentMode(converter.id)}
+                  onClick={() => {
+                    setCurrentMode(converter.id);
+                    if (onMobileClose) onMobileClose();
+                  }}
                 >
                   <span className="mode-icon">{converter.icon}</span>
                   <span className="mode-text">{converter.name}</span>
